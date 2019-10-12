@@ -1,17 +1,16 @@
 package com.xern.jogy34.spawnbed.general;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.plugin.PluginManager;
-
-import java.util.logging.Logger;
 
 public class EventListeners implements Listener
 {
@@ -24,10 +23,9 @@ public class EventListeners implements Listener
     @EventHandler
     public void setBed(final PlayerInteractEvent event)
     {
-        // SpawnBedMain.logger.info("setBed: " + event.getAction() + " " + event.getClickedBlock().getType());
         try
         {
-            if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.BED_BLOCK)
+            if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().data == Bed.class)
             {
                 Player p = event.getPlayer();
                 Block b = event.getClickedBlock();
@@ -57,7 +55,7 @@ public class EventListeners implements Listener
             String w = plugin.getConfig().getString((new StringBuilder(String.valueOf(p.getName()))).append(".World").toString());
             World world = plugin.getServer().getWorld(w);
             Location loc = new Location(world, x, y, z);
-            if(loc.getBlock().getType() == Material.BED_BLOCK)
+            if(loc.getBlock().getType().data == Bed.class)
                 event.setRespawnLocation(loc.add(0.5D, 1.0D, 0.5D));
             else
                 p.sendMessage((new StringBuilder()).append(ChatColor.RED).append("[Spawn Bed] Your bed is either blocked or destroyed").toString());
